@@ -19,3 +19,18 @@
 .receiver{
   justify-self: left;
 }
+
+.select {
+  background: transparent;
+  border: 1px solid gray;
+  padding: 5px;
+  position: absolute;
+  color: white;
+}
+
+.selectSender {
+  left: 0;
+}
+.selectReceiver {
+  right: 0;
+}

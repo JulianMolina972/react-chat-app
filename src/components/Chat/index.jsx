@@ -1,35 +1,52 @@
-import React, { useState } from 'react'
-import { useParams } from "react-router-dom"
+import React from 'react'
+import useChat  from "../../hooks/useChat"
+import { useParams, Link } from "react-router-dom"
 import { Message } from "../Message"
 
-import { MdSend } from "react-icons/md"
+import { MdSend, MdKeyboardBackspace } from "react-icons/md"
+import { FiInfo } from "react-icons/fi"
 import styles from './styles.module.css'
 
 export const Chat = () => {
-  const [messages, setMessages] = useState([])
   const { id } = useParams()
 
+
+  const { messages, sendMessage } = useChat(id)
+  const currentHour = `${new Date().getHours()}:${new Date().getMinutes()}`
   const handleSubmit = (e) => {
     e.preventDefault()
-    const value = e.target.myMessage.value
-    const hour = `${new Date().getHours()}:${new Date().getMinutes()}`
-    
-
-    setMessages([...messages, {text: value, hour}])
+    const value = e.target.elements.myMessage.value
+    if (value.length === 0) {
+      alert("Hey write something...")
+    } else {
+      sendMessage(value)
+    }
   }
 
   return (
     <div className={styles.chat}> 
       <header className={styles.header}>
+        <Link to={"/"}>
+          <button>
+            <MdKeyboardBackspace />
+          </button>
+        </Link> 
+
         <p>
           Chat with id:  {id}
         </p>
+        <Link to={"./info"}>
+          <button>
+            <FiInfo />
+          </button>
+
+        </Link>
       </header>
       <ol className={styles.messages}> 
       {messages.length === 0 ? 
       <>
-        <Message text="Hello" hour="10:00" sender={true} />
-        <Message text="Hello world" hour="10:09" sender={false} />
+        <Message body="Hello" hour={currentHour} sender={true} />
+        <Message body="Hello world" hour={currentHour} sender={false} />
       </>
 
       : messages.map((message) => <Message {...message} />)
